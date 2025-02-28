@@ -26,7 +26,7 @@
             display: block;
             margin-bottom: 5px;
         }
-        input {
+        input, textarea {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
@@ -41,6 +41,12 @@
         button:hover {
             background: #0056b3;
         }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -52,10 +58,39 @@
                 <input type="text" id="role" name="role" required>
                 <small>Act as_____and_______and_____</small>
             </div>
-            <!-- เพิ่มฟิลด์อื่นๆ ตาม 7 ข้อ -->
+            <div class="form-group">
+                <label for="situation">2. Situation:</label>
+                <textarea id="situation" name="situation" rows="3" required></textarea>
+                <small>Describe the situation.</small>
+            </div>
+            <div class="form-group">
+                <label for="model">3. Model:</label>
+                <input type="text" id="model" name="model" required>
+                <small>Specify the model to be used.</small>
+            </div>
+            <div class="form-group">
+                <label for="problem">4. Problem:</label>
+                <textarea id="problem" name="problem" rows="3" required></textarea>
+                <small>Describe the problem.</small>
+            </div>
+            <div class="form-group">
+                <label for="goal">5. Goal:</label>
+                <input type="text" id="goal" name="goal" required>
+                <small>What is the goal? (e.g., summarize, generate)</small>
+            </div>
+            <div class="form-group">
+                <label for="format">6. Format:</label>
+                <input type="text" id="format" name="format" required>
+                <small>Specify the output format.</small>
+            </div>
+            <div class="form-group">
+                <label for="tone">7. Tone:</label>
+                <input type="text" id="tone" name="tone" required>
+                <small>Specify the tone (e.g., persuasive, academic).</small>
+            </div>
             <button type="submit">Generate Prompt</button>
         </form>
-        <div id="results"></div>
+        <div id="results" class="result"></div>
     </div>
     <script>
         document.getElementById('promptForm').addEventListener('submit', function(e) {
@@ -63,19 +98,20 @@
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
 
-            // สร้าง Prompt ใน Frontend
-            const prompts = [
-                `1. Role: ${data.role}\n2. Situation: ${data.situation}\n...`,
-                // เพิ่ม Prompt อื่นๆ ตามต้องการ
-            ];
+            // สร้าง Prompt
+            const prompt = `
+                Role: ${data.role}
+                Situation: ${data.situation}
+                Model: ${data.model}
+                Problem: ${data.problem}
+                Goal: ${data.goal}
+                Format: ${data.format}
+                Tone: ${data.tone}
+            `;
 
+            // แสดงผลลัพธ์
             const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-            prompts.forEach(prompt => {
-                const promptDiv = document.createElement('div');
-                promptDiv.textContent = prompt;
-                resultsDiv.appendChild(promptDiv);
-            });
+            resultsDiv.innerHTML = `<pre>${prompt}</pre>`;
         });
     </script>
 </body>
