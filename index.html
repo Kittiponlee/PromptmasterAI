@@ -78,20 +78,37 @@
 
     <!-- JavaScript -->
     <script>
-        document.getElementById('promptForm').addEventListener('submit', function(e) {
+        // ฟังก์ชันแปลภาษาไทยเป็นอังกฤษ
+        async function translateToEnglish(text) {
+            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=th|en`);
+            const data = await response.json();
+            return data.responseData.translatedText || text; // หากแปลไม่ได้ให้คืนค่าต้นฉบับ
+        }
+
+        // จัดการการส่งฟอร์ม
+        document.getElementById('promptForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData);
 
+            // แปลข้อมูลเป็นภาษาอังกฤษ (ถ้าเป็นภาษาไทย)
+            const role = await translateToEnglish(data.role);
+            const situation = await translateToEnglish(data.situation);
+            const model = await translateToEnglish(data.model);
+            const problem = await translateToEnglish(data.problem);
+            const goal = await translateToEnglish(data.goal);
+            const format = await translateToEnglish(data.format);
+            const tone = await translateToEnglish(data.tone);
+
             // สร้าง Prompt
             const prompt = `
-Act as ${data.role} with over 10 years of experience.
-You are ${data.situation}.
-Use a ${data.model}.
-The problem is that ${data.problem}.
-The goal is to ${data.goal}.
-Provide the output in ${data.format}.
-Use a ${data.tone} tone.
+Act as ${role} with over 10 years of experience.
+You are currently in a situation where ${situation}.
+Use a ${model} to address the problem.
+The problem you are facing is that ${problem}.
+Your goal is to ${goal}.
+Please provide the output in ${format}.
+Use a ${tone} tone to convey the information effectively.
             `;
 
             // แสดงผลลัพธ์
