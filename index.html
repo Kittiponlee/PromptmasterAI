@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Prompt Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auto Prompt Generator</h1>
+        <form id="promptForm">
+            <div class="form-group">
+                <label for="role">1. Role:</label>
+                <input type="text" id="role" name="role" required>
+                <small>Act as_____and_______and_____</small>
+            </div>
+            <!-- เพิ่มฟิลด์อื่นๆ ตาม 7 ข้อ -->
+            <button type="submit">Generate Prompt</button>
+        </form>
+        <div id="results"></div>
+    </div>
+    <script>
+        document.getElementById('promptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            // สร้าง Prompt ใน Frontend
+            const prompts = [
+                `1. Role: ${data.role}\n2. Situation: ${data.situation}\n...`,
+                // เพิ่ม Prompt อื่นๆ ตามต้องการ
+            ];
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            prompts.forEach(prompt => {
+                const promptDiv = document.createElement('div');
+                promptDiv.textContent = prompt;
+                resultsDiv.appendChild(promptDiv);
+            });
+        });
+    </script>
+</body>
+</html>
